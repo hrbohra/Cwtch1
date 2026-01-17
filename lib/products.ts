@@ -3,15 +3,27 @@ import type { Product } from './types'
 
 const base = process.env.NEXT_PUBLIC_R2_BASE_URL || ''
 
+function withBase(url?: string) {
+  if (!url) return undefined
+  return url.startsWith('http') ? url : `${base}${url}`
+}
+
 export function getAllProducts(): Product[] {
-  const list = (productsRaw as any).products as Product[]
-  // Ensure full URL for images
+  const list = (productsRaw as any).products as any[]
+
   return list
-    .filter((p) => !!p.image)
+    .filter((p) => !!p.primary_image_path) // ONLY show products with an image
     .map((p) => ({
-      ...p,
-      image: p.image?.startsWith('http') ? p.image : `${base}${p.image}`,
-      images: (p.images || []).map((x) => (x.startsWith('http') ? x : `${base}${x}`)),
+      id: String(p.id),
+      source: p.source,
+      brand: p.brand,
+      category: p.category,
+      sku: p.sku ? String(p.sku) : undefined,
+      title: p.title,
+      description: p.description,
+      price_gbp: typeof p.price_gbp === 'number' ? p.price_gbp : undefined,
+      image: withBase(p.primary_image_path),
+      images: Array.isArray(p.image_paths) ? p.image_paths.map(withBase).filter(Boolean) as string[] : [],
     }))
 }
 
