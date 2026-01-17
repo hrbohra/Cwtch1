@@ -20,6 +20,7 @@ export function ProductCard({ product }: { product: Product }) {
               alt={product.title}
               fill
               className="object-cover scale-[1.01] group-hover:scale-[1.06] transition duration-700"
+              unoptimized
               sizes="(max-width: 768px) 100vw, 33vw"
             />
           ) : null}

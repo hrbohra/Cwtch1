@@ -30,6 +30,7 @@ export default function ProductPage({ params }: { params: { id: string } }) {
                 alt={product.title}
                 fill
                 className="object-cover"
+                unoptimized
                 sizes="(max-width: 768px) 100vw, 50vw"
               />
             )}
